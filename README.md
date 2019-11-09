@@ -25,3 +25,5 @@ HttpRequest request = new HttpRequest();
        String resultf = request.Post("http://example.com", "mail=example@gmail.com&password=pass").toString();
        System.out.println(resultf);
 </pre>
+
+This library have been inspired by the C# library xNet (https://github.com/X-rus/xNet)
