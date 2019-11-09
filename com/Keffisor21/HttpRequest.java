@@ -185,10 +185,7 @@ public class HttpRequest {
     public void addHeader(String a, String b) {
         headers.put(a, b);
     }
-   /* public static void main(String[] args) {
-         HttpRequest request = new HttpRequest();
-     System.out.println(request.GetProxy("http://checkip.amazonaws.com/", "121.40.66.129:1080", Proxy.Type.SOCKS));
-    }*/
+ 
    public Object GetProxy(String URL, String proxy, Proxy.Type type) {
         try {
   String[] pf = proxy.split(":");
