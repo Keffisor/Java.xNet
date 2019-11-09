@@ -12,7 +12,8 @@ String result = request.Get("http://checkip.amazonaws.com/").toString();
 
 String result2 = request.Post("http://example.com", "mail=example@gmail.com&password=pass").toString();
 
-String resultWithProxy = request.PostProxy("http://example.com", "mail=example@gmail.com&password=pass", "179.0.0.0:8080", Proxy.Type.HTTP).toString();
+String resultWithProxy = request.PostProxy("http://example.com", "mail=example@gmail.com&password=pass", 
+"179.0.0.0:8080", Proxy.Type.HTTP).toString();
 
 // Now with variables
 HttpRequest request = new HttpRequest();
