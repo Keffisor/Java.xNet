@@ -32,12 +32,12 @@ public class HttpRequest {
    
     }
     
-    public Object Post(String URL, String toPost) {
+    public Object Post(String URL, String parameters) {
         try {
 
                         URL url = new URL(URL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			byte[] payloadAsBytes = toPost.getBytes(Charset.forName("UTF-8"));
+			byte[] payloadAsBytes = parameters.getBytes(Charset.forName("UTF-8"));
 			
                         
 			conn.setConnectTimeout(ConnectTimeout);
@@ -181,7 +181,82 @@ public class HttpRequest {
 		}
 		return null;
 	}
+    
+      public Object Get(String URL, String parameters) {
+        try {
 
+                        URL url = new URL(URL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			byte[] payloadAsBytes = parameters.getBytes(Charset.forName("UTF-8"));
+			
+                        
+			conn.setConnectTimeout(ConnectTimeout);
+			conn.setReadTimeout(ReadWriteTimeout);
+                        
+                   
+ 			conn.setRequestMethod("GET");
+                        if(ContentType != null) {
+			conn.addRequestProperty("Content-Type", ContentType);
+                        }
+                        if(Referer != null) {
+                        conn.addRequestProperty("Referer", Referer);
+                        }
+                        
+                        conn.setInstanceFollowRedirects(KeepAlive);
+                     
+                        if(!Cookies.isEmpty()) {
+                        for(String cookie : Cookies) {
+                        conn.addRequestProperty("Cookie", cookie+";");
+                        }
+                        }
+                        if(UserAgent != null) {
+                            conn.addRequestProperty("User-Agent", UserAgent);
+                        }
+                        if(!headers.isEmpty()) {
+                      for(Map.Entry<String, String> entry : headers.entrySet()) {
+                           conn.addRequestProperty(entry.getKey(), entry.getValue());
+                           
+                      }
+                        }
+                        
+			conn.setUseCaches(false);
+			conn.setDoInput(true);
+			conn.setDoOutput(true);
+ 			DataOutputStream outStream = new DataOutputStream(conn.getOutputStream());
+			outStream.write(payloadAsBytes);
+			outStream.flush();
+
+                        outStream.close();
+                        
+                  
+			
+			InputStream inStream;
+			try {
+				inStream = conn.getInputStream();
+                                
+			} catch (Exception e) {
+				inStream = conn.getErrorStream();
+			}
+			
+			StringBuilder response = new StringBuilder();
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = inStream.read(buffer)) > 0) {
+				response.append(new String(buffer,"UTF-8").substring(0,bytesRead));
+                                  
+			}
+ 
+			return response.toString();
+			      
+                                  
+                                  
+		} catch (IOException e) {
+                    if(IgnoreProtocolErrors) {
+			System.out.println(e);
+                    }
+		}
+		return null;
+	}
     public void addHeader(String a, String b) {
         headers.put(a, b);
     }
